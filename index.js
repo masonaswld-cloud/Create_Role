@@ -81,4 +81,4 @@ app.listen(PORT, () => {
   console.log(`API running on port ${PORT}`);
 });
 
-client.login(process.env.MTUxMTQ3ODQzNzE1NDUyNTE4NA.GGDwlZ.tZnIh6x7Kf5wNuW69vltczH6u7ivUv_yzn7yE8);
+client.login(process.env.DISCORD_TOKEN);
