@@ -23,8 +23,11 @@ app.get("/", (req, res) => {
 
 app.post("/create-role", async (req, res) => {
   try {
-    const { role_name, role_color } = req.body;
-    const guildId = req.query.guildId || process.env.GUILD_ID;
+    const {
+      guildId,
+      role_name,
+      role_color
+    } = req.body;
 
     if (!guildId || !role_name || !role_color) {
       return res.status(400).json({
@@ -41,16 +44,19 @@ app.post("/create-role", async (req, res) => {
       reason: "Created through Discord Role API"
     });
 
-    res.json({
+    return res.json({
       success: true,
-      role_name: role.name,
-      role_color: role.hexColor
+      role: {
+        id: role.id,
+        name: role.name,
+        color: role.hexColor
+      }
     });
 
   } catch (error) {
     console.error(error);
 
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       error: error.message
     });
