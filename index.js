@@ -1,3 +1,4 @@
+
 require("dotenv").config();
 
 const express = require("express");
@@ -22,47 +23,28 @@ app.get("/", (req, res) => {
 
 app.post("/create-role", async (req, res) => {
   try {
-    const {
-      guildId,
-      name,
-      color,
-      mentionable,
-      hoist
-    } = req.body;
+    const { role_name, role_color } = req.body;
+    const guildId = req.query.guildId || process.env.GUILD_ID;
 
-    if (!guildId || !name) {
+    if (!guildId || !role_name || !role_color) {
       return res.status(400).json({
         success: false,
-        error: "guildId and name are required"
+        error: "guildId, role_name and role_color are required"
       });
     }
 
     const guild = await client.guilds.fetch(guildId);
 
-    if (!guild) {
-      return res.status(404).json({
-        success: false,
-        error: "Server not found"
-      });
-    }
-
     const role = await guild.roles.create({
-      name: name,
-      color: color || "Default",
-      mentionable: mentionable === true,
-      hoist: hoist === true,
+      name: role_name,
+      color: role_color,
       reason: "Created through Discord Role API"
     });
 
     res.json({
       success: true,
-      role: {
-        id: role.id,
-        name: role.name,
-        color: role.hexColor,
-        mentionable: role.mentionable,
-        hoist: role.hoist
-      }
+      role_name: role.name,
+      role_color: role.hexColor
     });
 
   } catch (error) {
